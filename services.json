@@ -1,0 +1,12 @@
+{
+  "volentix_mongo": {
+        "connectionString": "mongodb://localhost:27017/volentix"
+  },
+  "discord": {
+    "reveal_token": "",
+  },
+  "steemit": {
+    "posting_key" : "",
+    "active_key" : ""
+  }
+}
