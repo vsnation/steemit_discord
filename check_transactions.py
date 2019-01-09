@@ -3,7 +3,7 @@ import json
 from pymongo import MongoClient
 from steem import Steem
 
-with open('../services.json') as file:
+with open('services.json') as file:
     config = json.load(file)
     posting_key = config['steemit']['posting_key']
     active_key = config['steemit']['active_key']

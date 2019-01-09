@@ -8,7 +8,7 @@ import discord
 from pymongo import MongoClient
 from steem import Steem
 
-with open('../services.json') as file:
+with open('services.json') as file:
     config = json.load(file)
     discord_bot_token = config['discord']['reveal_token']
     posting_key = config['steemit']['posting_key']
