@@ -35,8 +35,8 @@ class CommandHandler:
         account = users_col.find_one({'DiscordAccountId': message.author.id})
         self.check_account(account, message=message)
 
-        if args[0] == 'steemit':
-            await self.steemit_register(account, message)
+        if args[0] == 'steem':
+            await self.steem_register(account, message)
         elif args[0] == 'vtx':
             await self.vtx_register(account, message)
         elif args[0] == 'telegram':
@@ -44,24 +44,24 @@ class CommandHandler:
 
 
     def vtx_register(self, account, message):
-        if account['VTXAddress'] is None:
-            vtx_address = re.search(EOS_REGEX, message.content)
-            if vtx_address is not None:
-                vtx_address = vtx_address.group(0)
-                users_col.update(
-                    account,
-                    {
-                        "$set":
-                            {
-                                "VTXAddress": vtx_address
-                            }
-                    }
-                )
-                msg = '*You have successfully linked the VTX address.*\n%s' % vtx_address
-            else:
-                msg = 'We could not find the VTX address in the request, please repeat again using command\n**$register vtx {VTX_ADDRESS}**'
+        vtx_address = re.search(EOS_REGEX, message.content)
+        if vtx_address is not None:
+            vtx_address = vtx_address.group(0)
+            users_col.update(
+                account,
+                {
+                    "$set":
+                        {
+                            "VTXAddress": vtx_address
+                        }
+                }
+            )
+            msg = '*You have successfully linked the VTX address.*\n```%s```' % vtx_address
+        else:
+            msg = 'We could not find the VTX address in the request, please repeat again using command\n**$register vtx {VTX_ADDRESS}**'
 
-            return self.client.send_message(message.author, msg)
+        return self.client.send_message(message.author, msg)
+
 
     def telegram_register(self, account, message):
         if account['TelegramUserId'] is None:
@@ -83,13 +83,13 @@ class CommandHandler:
 
 
 
-    def steemit_register(self, account, message):
+    def steem_register(self, account, message):
 
         if account['SteemUserName'] is None:
             msg = 'Please send 0.001 Steem from your Steemit account to' \
                   ' %s with memo %s' % (STEEM_PROJECT_ACCOUNT, account['SteemMemo'])
         else:
-            msg = 'Your steemit account has already linked!'
+            msg = 'Your steem account has already linked!'
         return self.client.send_message(message.author, msg)
 
 
@@ -172,7 +172,7 @@ async def on_message(message):
             if len(args) == 0:
                 msg = '*You have entered an incorrect command*\n' \
                       '**Commands:**\n' \
-                      '$register steemit - link steemit account\n' \
+                      '$register steem - link steem account\n' \
                       '$register telegram - link telegram account\n' \
                       '$register vtx {VTX_ADDRESS} - link VTX public address'
                 await client.send_message(message.author, msg)
